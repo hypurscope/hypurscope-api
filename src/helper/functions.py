@@ -1,8 +1,10 @@
+from fastapi import HTTPException
 from src.validator.defi import Protocol
 import httpx
 from src.helper.db import get_client
 from datetime import datetime, timezone
 from src.config import defi_url
+from src.validator.user import TrackData
 
 
 async def process_defi():
@@ -24,7 +26,7 @@ async def get_defi_from_db():
 
 
 async def save_or_update_defi_to_db(updated_data: Protocol):
-    client = get_client()
+    client = await get_client()
     database = client["defi-db"]
     collection = database["defi"]
     query_filter = {
@@ -50,3 +52,24 @@ def to_epoch_millis(date_str: str) -> int:
 
     # Return milliseconds
     return int(utc_dt.timestamp() * 1000)
+
+
+async def save_tracking_data(data: TrackData):
+    client = await get_client()
+    database = client["defi-db"]
+    collection = database["wallet-track"]
+    query_filter = {"id": data.id, "email": data.email}
+    result = collection.find_one(query_filter)
+    if result:
+        raise HTTPException(
+            detail="Wallet already being tracked by this user",
+            status_code=400,
+        )
+    else:
+        try:
+            collection.insert_one(data.model_dump())
+        except Exception as e:
+            raise HTTPException(
+                detail=(e),
+                status_code=500,
+            )

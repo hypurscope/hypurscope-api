@@ -1,24 +1,10 @@
-from datetime import datetime
 from typing import List, Optional  # noqa: F401
-from pydantic import BaseModel, RootModel, field_validator
+from pydantic import BaseModel, EmailStr, RootModel
 
 
-class UserInfoData(BaseModel):
+class TrackData(BaseModel):
     id: str
-    start_time: str
-    end_time: Optional[str] = None
-
-    @field_validator("start_time", "end_time", mode="before")
-    def validate_datetime_format(cls, value, info):
-        if value is None:
-            return value
-        try:
-            datetime.strptime(value, "%Y-%m-%d %H:%M")
-        except ValueError:
-            raise ValueError(
-                f"{info.field_name} must be in 'YYYY-MM-DD HH:MM' format and be a valid date/time"
-            )
-        return value
+    email: EmailStr
 
 
 # UserState Validator ####

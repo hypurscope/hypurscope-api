@@ -15,9 +15,11 @@ from src.validator.defi import Protocol
 from src.helper.functions import (
     process_defi,
     get_defi_from_db,
+    save_tracking_data,
 )
 from src.helper.user_functions import all_user_data
 from src.helper.hyperscan_function import get_spot_in_usdc, get_token_holders
+from src.validator.user import TrackData
 
 router = APIRouter(prefix="/api")
 
@@ -116,3 +118,9 @@ async def get_holders(token: str):
 @router.get("/get-spot-info")
 async def get_spot_info():
     return await get_spot_in_usdc()
+
+
+@router.post("/track-wallet")
+async def track_wallet(data: TrackData):
+    await save_tracking_data(data)
+    return "Wallet succesfully being tracked"
