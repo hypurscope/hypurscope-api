@@ -123,4 +123,7 @@ async def get_spot_info():
 @router.post("/track-wallet")
 async def track_wallet(data: TrackData):
     await save_tracking_data(data)
+    # Todo:
+    # Add a background track that checks if the wallet is already being
+    # tracked, else add fetch and add to the tracked-wallet
     return "Wallet succesfully being tracked"
