@@ -54,7 +54,7 @@ This is the backend application for the **hyperscope** project built with **Fast
    
    d. GET https://hyper-e1nj.onrender.com/api/get-spot-info
    
-   e. POST /api/track-wallet/api/track-wallet
+   e. POST https://hyper-e1nj.onrender.com/api/track-wallet
 
 ## Project Structure
    .
