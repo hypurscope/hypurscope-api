@@ -45,18 +45,28 @@ This is the backend application for the **hyperscope** project built with **Fast
 
    Endpoints:
    a. GET https://hyper-e1nj.onrender.com/api/user-info/{id}
+   
    b. GET https://hyper-e1nj.onrender.com/api/defi
+   
    c. GET https://hyper-e1nj.onrender.com/api/get-holder/{token}
+   
    d. GET https://hyper-e1nj.onrender.com/api/get-spot-info
+   
    e. POST /api/track-wallet/api/track-wallet
 
 ## Project Structure
    .
+   
    ├── src/
+   
    │   ├── routes/        # API endpoints
+   
    │   ├── helpers/       # helper-functions
+   
    │   ├── validator/     # Pydantic schemas
-   │   ├── services/      # Business logic
+   
    │   └── main.py        # Entry point
+   
    ├── requirements.txt
+   
    └── README.md
