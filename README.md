@@ -46,6 +46,7 @@ This is the backend application for the **hyperscope** project built with **Fast
    ii. Redoc: https://hyper-e1nj.onrender.com/redoc
 
    Endpoints:
+   
    a. GET https://hyper-e1nj.onrender.com/api/user-info/{id}
    
    b. GET https://hyper-e1nj.onrender.com/api/defi
