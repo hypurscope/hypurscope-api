@@ -40,7 +40,9 @@ This is the backend application for the **hyperscope** project built with **Fast
 
 ## API Docs
    Fastapi provides interactive docs of the box;
+   
    i. Swagger UI: https://hyper-e1nj.onrender.com/docs
+   
    ii. Redoc: https://hyper-e1nj.onrender.com/redoc
 
    Endpoints:
@@ -70,3 +72,6 @@ This is the backend application for the **hyperscope** project built with **Fast
    ├── requirements.txt
    
    └── README.md
+   
+## Contribution
+  Pull requests are welcome. For major changes, open an issue first to discuss what you’d like to change.
