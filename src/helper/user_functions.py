@@ -6,7 +6,6 @@ from hyperliquid.utils import constants  # noqa: F401
 from hyperliquid.utils.types import Meta, SpotMeta  # noqa: F401
 import json  # noqa: F401
 import time
-from src.helper.functions import to_epoch_millis
 from src.validator.user import (
     Balances,
     Delegations,
@@ -15,7 +14,7 @@ from src.validator.user import (
     # Rewards,
     StakingSummary,
 )
-
+from src.helper.time import to_epoch_millis
 # start_time = int(time.time() * 1000) - (7 * 24 * 60 * 60 * 1000)  # 7 days ago
 
 
@@ -174,3 +173,22 @@ def all_user_data(id: str, start_time: str, end_time: str = None):
         print(str(e))
         print(str(e))
         raise HTTPException(detail=str(e), status_code=400)
+
+
+async def all_user_data_without_fills(id: str):
+    try:
+        user_state = process_user_state(id)
+        user_spot_state = spot_user_state(id)
+        staking_summary = user_staking_summary(id)
+        delegation = user_staking_delegations(id)
+
+        user_data = {
+            "user_state": user_state,
+            "user_spot_state": user_spot_state,
+            "staking_summary": staking_summary,
+            "staking_delegation": delegation,
+        }
+        return user_data
+    except Exception as e:
+        print(str(e))
+        return None

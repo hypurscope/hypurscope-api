@@ -8,6 +8,7 @@ from fastapi import (
     Query,
     WebSocket,
     WebSocketDisconnect,
+    BackgroundTasks
 )
 from src.helper.db import get_client  # noqa: F401
 from src.helper.defi_functions import clients
@@ -16,6 +17,7 @@ from src.helper.functions import (
     process_defi,
     get_defi_from_db,
     save_tracking_data,
+    save_wallet_details
 )
 from src.helper.user_functions import all_user_data
 from src.helper.hyperscan_function import get_spot_in_usdc, get_token_holders
@@ -121,9 +123,8 @@ async def get_spot_info():
 
 
 @router.post("/track-wallet")
-async def track_wallet(data: TrackData):
+async def track_wallet(data: TrackData, background: BackgroundTasks):
     await save_tracking_data(data)
-    # Todo:
-    # Add a background track that checks if the wallet is already being
-    # tracked, else add fetch and add to the tracked-wallet
+    background.add_task(save_wallet_details, data.id)
     return "Wallet succesfully being tracked"
+  

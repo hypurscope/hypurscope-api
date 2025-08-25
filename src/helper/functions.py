@@ -2,10 +2,10 @@ from fastapi import HTTPException
 from src.validator.defi import Protocol
 import httpx
 from src.helper.db import get_client
-from datetime import datetime, timezone
 from src.config import defi_url
 from src.validator.user import TrackData
-
+from src.helper.user_functions import all_user_data_without_fills
+from collections import defaultdict
 
 async def process_defi():
     async with httpx.AsyncClient() as client:
@@ -40,19 +40,6 @@ async def save_or_update_defi_to_db(updated_data: Protocol):
         collection.insert_one(replace_doc)
 
 
-def to_epoch_millis(date_str: str) -> int:
-    """
-    Convert 'YYYY-MM-DD HH:MM' in local time to epoch ms in UTC
-    """
-    # Parse string as local time
-    local_dt = datetime.strptime(date_str, "%Y-%m-%d %H:%M")
-
-    # Convert to UTC
-    utc_dt = local_dt.astimezone(timezone.utc)
-
-    # Return milliseconds
-    return int(utc_dt.timestamp() * 1000)
-
 
 async def save_tracking_data(data: TrackData):
     client = await get_client()
@@ -73,3 +60,40 @@ async def save_tracking_data(data: TrackData):
                 detail=(e),
                 status_code=500,
             )
+
+async def save_wallet_details(id):
+  # Todo:
+  # checks if the wallet is already being tracked, else fetch data and add to the tracked-wallet
+  print("holla")
+
+async def get_wallet_details():
+  pass
+
+
+def group_by_id(data):
+    grouped = defaultdict(list)
+    for item in data:
+        grouped[item["id"]].append(item["email"])
+    return [
+      {"id": id_, "emails": emails} for id_, emails in grouped.items()
+    ]
+
+async def fetch_wallet_data():
+  print("fetch data")
+  client = await get_client()
+  database = client["defi-db"]
+  collection = database["wallet-track"]
+  results = collection.find({}).to_list(length=None)
+  if results:
+    results = group_by_id(results)
+  #print(results)
+  for r in results:
+    d = await all_user_data_without_fills(r["id"])
+    if d:
+      print(d)
+      # get_wallet_details()
+      # compare data
+      # if diff
+      # send email
+      # save the new data
+  
